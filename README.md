@@ -1,6 +1,7 @@
-# Prototype dépôt d'annonce BDC - workshop v3
+# Prototype dépôt d'annonce BDC - v37
 
 Prototype HTML interactif du nouveau parcours de dépôt (User Flow Miro, nominal uniquement).
+Tout tient dans `index.html` (images intégrées) ; le dossier `assets/` sert de secours.
 
 ## Lancer
 Option rapide : double-cliquer sur `index.html` (s'ouvre dans le navigateur).
@@ -10,10 +11,10 @@ Option recommandée (serveur local, comportement identique au partage) :
     cd LBC-depot-prototype
     python3 -m http.server 5173
 
-puis ouvrir http://localhost:5173 (aucune dépendance, HTML / CSS / JS, Python 3 préinstallé sur macOS).
+puis ouvrir http://localhost:5173 (aucune dépendance, Python 3 préinstallé sur macOS).
 
 Un panneau « Parcours de test » à gauche de la maquette permet de sauter à chaque étape
-(ou `?step=home|gallery|count|detect|form1|formN|done`). « Recommencer » remet à zéro.
+(ou `?step=home|gallery|form1|formN|done|doneN`). « Recommencer » remet à zéro.
 
 ## Parcours couvert
 1. Accueil, clic sur « Publier » dans la tab bar
