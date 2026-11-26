@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="800" height="800">
+<defs>
+<filter id="noise" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="4"/><feColorMatrix type="saturate" values="0"/><feComponentTransfer><feFuncA type="linear" slope="0.16"/></feComponentTransfer></filter>
+<filter id="noiseS" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="0.7" numOctaves="3" seed="9"/><feColorMatrix type="saturate" values="0"/><feComponentTransfer><feFuncA type="linear" slope="0.34"/></feComponentTransfer></filter>
+<filter id="blur6"><feGaussianBlur stdDeviation="7"/></filter>
+<filter id="blur2"><feGaussianBlur stdDeviation="2"/></filter>
+<linearGradient id="gWood" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#bf8750"/><stop offset="1" stop-color="#8e5a2c"/></linearGradient>
+<radialGradient id="gConc" cx=".5" cy=".4" r=".8"><stop offset="0" stop-color="#cbc8c1"/><stop offset="1" stop-color="#9d9a94"/></radialGradient>
+<linearGradient id="gLinen" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#efe7da"/><stop offset="1" stop-color="#d9cdbb"/></linearGradient>
+<linearGradient id="gPark" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#dcbd8f"/><stop offset="1" stop-color="#c9a672"/></linearGradient>
+<radialGradient id="vig" cx=".5" cy=".5" r=".75"><stop offset=".55" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".32"/></radialGradient>
+<linearGradient id="steel" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f4f5f6"/><stop offset=".45" stop-color="#a9adb2"/><stop offset="1" stop-color="#6d7075"/></linearGradient>
+<linearGradient id="steelH" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#8d9196"/><stop offset=".4" stop-color="#f0f1f2"/><stop offset="1" stop-color="#7b7e83"/></linearGradient>
+<linearGradient id="yellow" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffdc4d"/><stop offset=".55" stop-color="#f2b705"/><stop offset="1" stop-color="#b98300"/></linearGradient>
+<linearGradient id="rubber" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#17171a"/><stop offset=".5" stop-color="#3a3b40"/><stop offset="1" stop-color="#1b1b1e"/></linearGradient>
+<linearGradient id="batt" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3b3c42"/><stop offset="1" stop-color="#16161a"/></linearGradient>
+<linearGradient id="wall" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff7a45"/><stop offset=".5" stop-color="#c13b7a"/><stop offset="1" stop-color="#3a2d8a"/></linearGradient>
+<linearGradient id="pBack" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#58677d"/><stop offset="1" stop-color="#2c3746"/></linearGradient>
+<linearGradient id="caseW" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#d9dcdf"/></linearGradient>
+<linearGradient id="leather" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#e3e1da"/></linearGradient>
+<linearGradient id="navy" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2a4272"/><stop offset="1" stop-color="#16233f"/></linearGradient>
+<linearGradient id="green" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#2f8f58"/><stop offset="1" stop-color="#1f6b40"/></linearGradient>
+</defs>
+<rect width="400" height="400" fill="url(#gLinen)"/><rect width="400" height="400" filter="url(#noise)"/><path d="M0 120 Q120 90 240 130 T400 110" stroke="rgba(120,100,70,.12)" stroke-width="14" fill="none"/><path d="M0 300 Q140 330 260 290 T400 310" stroke="rgba(255,255,255,.35)" stroke-width="16" fill="none"/><g transform=""><ellipse cx="200" cy="382" rx="86" ry="10" fill="rgba(0,0,0,0.32)" filter="url(#blur6)"/>
+<rect x="121" y="36" width="158" height="326" rx="32" fill="#16171b"/><rect x="123" y="38" width="154" height="322" rx="30" fill="none" stroke="rgba(255,255,255,.25)" stroke-width="2"/>
+<rect x="119" y="110" width="3" height="30" rx="1.5" fill="#2a2b30"/><rect x="119" y="150" width="3" height="46" rx="1.5" fill="#2a2b30"/><rect x="278" y="132" width="3" height="60" rx="1.5" fill="#2a2b30"/>
+<rect x="129" y="44" width="142" height="310" rx="25" fill="url(#wall)"/>
+<rect x="176" y="54" width="48" height="14" rx="7" fill="#050506"/>
+<text x="200" y="130" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="46" font-weight="700" fill="rgba(255,255,255,.95)">9:41</text>
+<text x="200" y="152" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="11" fill="rgba(255,255,255,.8)">mardi 19 novembre</text>
+<rect x="143" y="180" width="64" height="64" rx="16" fill="rgba(255,255,255,.22)"/><rect x="215" y="180" width="64" height="64" rx="16" fill="rgba(255,255,255,.16)" transform="translate(-14 0)"/>
+<rect x="141" y="306" width="27" height="27" rx="7" fill="rgba(255,255,255,.3)"/><rect x="172" y="306" width="27" height="27" rx="7" fill="rgba(255,255,255,.3)"/><rect x="203" y="306" width="27" height="27" rx="7" fill="rgba(255,255,255,.3)"/><rect x="234" y="306" width="27" height="27" rx="7" fill="rgba(255,255,255,.3)"/>
+<path d="M136 50 Q170 46 214 48" stroke="rgba(255,255,255,.35)" stroke-width="3" fill="none" stroke-linecap="round"/></g><rect width="400" height="400" fill="url(#vig)"/>
+</svg>
