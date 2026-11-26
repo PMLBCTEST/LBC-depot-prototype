@@ -1,11 +1,11 @@
 <!doctype html>
 <html lang="fr">
 <head>
-  <!-- Prototype dépôt d'annonce BDC, version v37 figée (2026-11-26). Fichier autonome : HTML + CSS + JS + illustrations. -->
+  <!-- Prototype dépôt d'annonce BDC, version v38 figée (2026-11-26). Fichier autonome : HTML + CSS + JS + illustrations. -->
   <meta name="robots" content="noindex">
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Leboncoin - Prototype dépôt d'annonce (v37 figée)</title>
+  <title>Leboncoin - Prototype dépôt d'annonce (v38 figée)</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:opsz,wght@6..12,400;6..12,700&display=swap" rel="stylesheet">
@@ -1841,7 +1841,8 @@ body { display: flex; justify-content: center; align-items: stretch; padding: 0;
     },
     typeSheet, closeSheet,
     otherType(t) { closeSheet(true); toast(`Le dépôt ${t.dataset.t} est hors périmètre du prototype`); },
-    vertical(t) { S.vertical = t.dataset.v; refreshCategory(); },
+    // 1er tap : sélectionne la verticale ; tap sur la verticale déjà sélectionnée (toute la carte, pas seulement le check) : confirme
+    vertical(t) { if (S.vertical === t.dataset.v) { actions.catNext(); return; } S.vertical = t.dataset.v; refreshCategory(); },
     pickerToggle() { $('.sheet.picker', layer)?.classList.toggle('tall'); },
     camera() { closeSheet(true); go('camera'); },
     shoot() {
