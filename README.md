@@ -1,4 +1,4 @@
-# Prototype dépôt d'annonce BDC - v45
+# Prototype dépôt d'annonce BDC - v46
 
 Prototype HTML interactif du nouveau parcours de dépôt (User Flow Miro, nominal uniquement).
 Tout tient dans `index.html` (images intégrées) ; le dossier `assets/` sert de secours.

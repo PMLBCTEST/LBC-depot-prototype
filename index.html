@@ -1,11 +1,11 @@
 <!doctype html>
 <html lang="fr">
 <head>
-  <!-- Prototype dépôt d'annonce BDC, version v45 figée (2026-11-26). Fichier autonome : HTML + CSS + JS + photos et illustrations. -->
+  <!-- Prototype dépôt d'annonce BDC, version v46 figée (2026-11-26). Fichier autonome : HTML + CSS + JS + photos et illustrations. -->
   <meta name="robots" content="noindex">
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Leboncoin - Prototype dépôt d'annonce (v45 figée)</title>
+  <title>Leboncoin - Prototype dépôt d'annonce (v46 figée)</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:opsz,wght@6..12,400;6..12,700&display=swap" rel="stylesheet">
@@ -1201,8 +1201,8 @@ body { display: flex; justify-content: center; align-items: stretch; padding: 0;
   // Détection en temps réel : mots-clés (début de mot, accents gérés) sur le texte saisi ou dicté
   const W = (words) => new RegExp(`(?<![\\p{L}])(?:${words})`, 'iu');
   const CHIPS = [
-    { id: 'why', label: 'Pourquoi je vends', re: W('vend|parce|car(?![\\p{L}])|déménag|trop|plus (?:besoin|utilis|porté)|ne (?:me )?sert|jamais (?:porté|utilisé|mis)|chang|remplac|cadeau|doublon|n\'utilis|besoin|manque de place') },
-    { id: 'wear', label: 'État / usure', re: W('état|neuf|usure|usé|rayure|abîm|tache|trace|fonctionn|impeccable|bon |très bon|parfait|cass|défaut|propre|comme') },
+    { id: 'why', label: 'Pourquoi je vends', re: W('vend|parce|car(?![\\p{L}])|déménag|trop|plus (?:besoin|utilis|porté)|utilise plus|sers plus|sert plus|ne (?:me )?sert|jamais (?:porté|utilisé|mis)|chang|remplac|cadeau|doublon|n\'utilis|besoin|manque de place') },
+    { id: 'wear', label: 'État / usure', re: W('état|neuf|neuve|jamais (?:servi|utilisé|installé)|usure|usé|rayure|abîm|tache|trace|fonctionn|impeccable|bon |très bon|parfait|cass|défaut|propre|comme') },
     { id: 'age', label: 'Ancienneté', re: W('(?:\\d+|un|une|deux|trois|quatre|cinq|six|sept|huit|dix) (?:an|ans|mois|semaine|semaines|année|années)|depuis|acheté|récent|il y a') },
     { id: 'incl', label: 'Ce qui est inclus', re: W('avec|inclus|boîte|boite|chargeur|fourni|livré|câble|cable|facture|accessoire|emballage|notice|housse|sans') },
   ];
@@ -1222,7 +1222,7 @@ body { display: flex; justify-content: center; align-items: stretch; padding: 0;
       const p = a.params.find((x) => x.key === spec.key); if (p.source === 'user') return;
       p.value = spec.ai || null; p.source = spec.ai ? 'ai' : 'empty';
     });
-    if (f.wear) { const e = a.params.find((p) => p.key === 'etat'); if (e.source !== 'user') { e.value = 'Très bon état'; e.source = 'ai'; } }
+    if (f.wear) { const e = a.params.find((p) => p.key === 'etat'); if (e.source !== 'user') { e.value = /(?<![\p{L}])neu(?:f|ve)(?![\p{L}])/iu.test(text) ? 'Neuf' : 'Très bon état'; e.source = 'ai'; } }
     if (!a.price || a.price === a.genPrice) { a.price = a.genPrice = K.price + (f.wear ? 5 : 0); }
     a.analysed = true; a.ready = false;
   }
@@ -1986,7 +1986,7 @@ body { display: flex; justify-content: center; align-items: stretch; padding: 0;
     generate() {
       const all = isAll(), targets = all ? S.ads : [ad()], onToutes = S.active === null;
       stopVoice(); closeSheet(true); S.magicAll = false;
-      if (all) targets.forEach((a) => { a.text = S.allText; });
+      if (all) { const parts = splitByAd(S.allText, targets); targets.forEach((a, i) => { a.text = parts[i]; }); }
       targets.forEach((a) => generate(a, a.text));
       const rank = { S: 0, M: 1, L: 2 }; S.delivery.size = targets.map((a) => KINDS[a.kind].size).sort((x, y) => rank[y] - rank[x])[0] || S.delivery.size; // taille de colis estimée d'après l'objet (la plus grande en multi)
       render(); runFill(onToutes);
@@ -2088,13 +2088,53 @@ body { display: flex; justify-content: center; align-items: stretch; padding: 0;
   }
 
   /* ---------- Dictée vocale simulée ---------- */
-  const VOICE = 'Je vends car elles sont devenues trop petites. Je les ai achetées il y a deux ans, elles sont en très bon état, et je les vends avec la boîte d\'origine.'.split(' ');
+  // v46 : la dictée simulée reflète l'objet déposé (selon le type d'objet détecté, ou la verticale Immo / Auto)
+  const VOICES = {
+    switch: 'Elle est neuve, je la vends car je ne l\'utilise plus. Je l\'ai achetée il y a un an et elle est vendue avec le dock, la pochette et une deuxième paire de Joy-Con.',
+    robot: 'Je le vends car je manque de place dans ma cuisine. Il a trois ans et fonctionne parfaitement, je le vends avec tous ses accessoires et la boîte d\'origine.',
+    laptop: 'Je le vends car je suis passé sur un ordinateur plus puissant. Il a deux ans, il est en très bon état, sans rayure, et je le vends avec son chargeur.',
+    panini: 'Je le vends car on ne s\'en sert plus. Acheté il y a un an, il fonctionne très bien et les plaques sont propres. Je le vends avec sa notice.',
+    minuterie: 'Elle est neuve, je la vends car j\'ai changé de chauffe-eau. Achetée il y a six mois, jamais installée, je la vends dans son emballage avec la notice.',
+    noel: 'Je les vends car on change de déco cette année. Les décorations ont trois ans, tout est en très bon état et la guirlande fonctionne. Le lot est vendu avec sa boîte de rangement.',
+    immo: 'Je vends mon appartement car on déménage pour le travail. Il a été rénové il y a deux ans, il est en très bon état et il est vendu avec une cave et une place de parking.',
+    auto: 'Je la vends car j\'ai besoin d\'une voiture plus grande. Je l\'ai achetée il y a trois ans, elle est en très bon état et je la vends avec le carnet d\'entretien et les factures.',
+    mix: 'Je vends tout car je déménage. Tout a été acheté il y a moins de trois ans, tout est en bon état et chaque objet est vendu avec ses accessoires.',
+  };
+  // Multi-annonces (champ commun) : une phrase par objet, qui nomme l'objet pour pouvoir la ranger dans la bonne annonce
+  const VOICES_MULTI = {
+    switch: 'La Switch est neuve, je la vends car je ne l\'utilise plus. Achetée il y a un an, elle est vendue avec le dock et la pochette.',
+    robot: 'Le robot pâtissier, je le vends car je manque de place. Il a trois ans, il fonctionne parfaitement et il est vendu avec tous ses accessoires.',
+    laptop: 'Le PC portable, je le vends car je suis passé sur un ordinateur plus puissant. Il a deux ans, il est en très bon état et vendu avec son chargeur.',
+    panini: 'L\'appareil à panini, je le vends car on ne s\'en sert plus. Acheté il y a un an, il fonctionne très bien et je le vends avec sa notice.',
+    minuterie: 'La minuterie Legrand est neuve, je la vends car j\'ai changé de chauffe-eau. Achetée il y a six mois, elle est vendue dans son emballage.',
+    noel: 'La déco de Noël, je la vends car on change de style. Elle a trois ans, la guirlande fonctionne et le lot est vendu avec sa boîte.',
+  };
+  function voiceWords() {
+    const list = isAll() ? S.ads : [ad() || S.ads[0]].filter(Boolean);
+    const keys = [...new Set(list.map((a) => (isV(a) ? a.vertical : a.kind)))];
+    if (keys.length === 1) return (VOICES[keys[0]] || VOICES.mix).split(' ');
+    const multi = keys.map((k) => VOICES_MULTI[k]).filter(Boolean);
+    return (multi.length === keys.length ? multi.join(' ') : VOICES.mix).split(' ');
+  }
+  // Répartition du texte commun entre les annonces : une phrase qui nomme un objet ouvre son segment,
+  // les phrases suivantes s'y rattachent ; les phrases avant toute mention valent pour toutes les annonces
+  const KIND_RE = {
+    switch: /switch|console|joy-con/iu, robot: /robot|pâtiss/iu, laptop: /(?<![\p{L}])pc(?![\p{L}])|ordinateur|dell|portable/iu,
+    panini: /panini|grill/iu, minuterie: /minuterie|programmateur|legrand/iu, noel: /no[eë]l|(?<![\p{L}])déco|guirlande|boules/iu,
+  };
+  function splitByAd(text, ads) {
+    const sents = (text || '').match(/[^.!?]+[.!?]*/g) || [], kinds = ads.map((a) => a.kind);
+    const per = Object.fromEntries(kinds.map((k) => [k, []])), shared = []; let cur = null;
+    sents.forEach((x) => { x = x.trim(); if (!x) return; const hit = kinds.find((k) => KIND_RE[k] && KIND_RE[k].test(x)); if (hit) cur = hit; (cur ? per[cur] : shared).push(x); });
+    if (!kinds.some((k) => per[k].length)) return ads.map(() => text);
+    return ads.map((a) => [...shared, ...per[a.kind]].join(' '));
+  }
   // Rythme inspiré de shadcn « Writing Text » : délai = 30 ms par caractère et espace, + pause après , ; : (x5) et . ! ? (x10)
   const SPEED = 30;
   const wordDelay = (w) => (w.length + 1) * SPEED + (/[.!?]$/.test(w) ? 10 * SPEED : /[,;:–-]$/.test(w) ? 5 * SPEED : 0) + 120;
   function startVoice() {
     S.voice = true; updateVoiceUi(); const id = isAll() ? 'allText' : 'magic';
-    const ta = $('#' + id), live = $('#magicLive'); let i = 0; const base = ta.value ? ta.value + ' ' : '';
+    const ta = $('#' + id), live = $('#magicLive'), VOICE = voiceWords(); let i = 0; const base = ta.value ? ta.value + ' ' : '';
     if (live) { live.textContent = base; live.classList.add('on'); ta.classList.add('ghost'); }
     const step = () => {
       if (!S.voice) return;
