@@ -1,4 +1,4 @@
-# Prototype dépôt d'annonce BDC - v38
+# Prototype dépôt d'annonce BDC - v45
 
 Prototype HTML interactif du nouveau parcours de dépôt (User Flow Miro, nominal uniquement).
 Tout tient dans `index.html` (images intégrées) ; le dossier `assets/` sert de secours.
@@ -33,7 +33,7 @@ La livraison et la mise en avant sont partagées entre les annonces dans ce prot
 
 ## Design System
 Spark Foundation leboncoin, thème **Part**, mode **Light**, tokens stables uniquement (source : skill leboncoin-design-system).
-- Tokens en tête de `styles.css` : palette Part, rôles sémantiques (Main, Support, Accent, Success, Alert, Error, Info, Neutral, Surface, Outline, Overlay), espacements 4/8/16/24/32/40/48 (pas de 12 px), rayons (Button full, Chip et Input xl, Tag sm, Card lg), bordures, ombres, durées et easings.
+- Tokens en tête du `<style>` de `index.html` : palette Part, rôles sémantiques (Main, Support, Accent, Success, Alert, Error, Info, Neutral, Surface, Outline, Overlay), espacements 4/8/16/24/32/40/48 (pas de 12 px), rayons (Button full, Chip et Input xl, Tag sm, Card lg), bordures, ombres, durées et easings.
 - Typographie Nunito Sans (Google Fonts, repli système hors ligne), styles Headline / Subhead / Body / Caption.
 - Composants : Button (main, outlined, tinted, ghost), Icon Button, Chip, Tag, Card, Input / Textarea / Form Field, Switch, Radio, Checkbox, Bottom Sheet, Toast, Tabbar 5 items, Sticky Bottom, Progress, Spinner, Skeleton.
 - Les tokens 🆕 (AI, Focus, Surface Dark) ne sont pas utilisés : le « pré-rempli » utilise Support Container.
@@ -42,4 +42,4 @@ Spark Foundation leboncoin, thème **Part**, mode **Light**, tokens stables uniq
 - Icônes : jeu provisoire inline, à remplacer par LBC Iconography.
 - Hauteur des boutons (48 px) et contrôles de sélection en intent Support : non documentés dans la foundation.
 - Texte secondaire : alias Nightshade 600 pour garantir le contraste AA.
-- Photos : illustrations de démonstration reprises du prototype v1.
+- Photos : photos JPG de démonstration (laptop, minuterie, Noël, panini, robot, Switch).
