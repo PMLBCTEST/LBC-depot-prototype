@@ -517,7 +517,9 @@ h1, h2, h3, p { margin: 0; }
 .pc-link { font-size: 14px; line-height: 20px; font-weight: 700; color: var(--neutral); text-decoration: underline; text-underline-offset: 2px; white-space: nowrap; }
 .price-field.invalid .price-card { outline: var(--border-md) solid var(--error); outline-offset: -2px; }
 /* Ligne « Prix recommandé » dans la bottom sheet (texte, plus de bouton) */
-.reco-line { margin-top: var(--sp-lg); }
+.reco-line { margin-top: var(--sp-lg); display: flex; align-items: center; flex-wrap: wrap; gap: 4px; }
+.help-q { display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; margin-left: var(--sp-md); border-radius: var(--rounded-full); background: var(--neutral); color: #fff; font-weight: 700; font-size: 14px; line-height: 1; flex: none; }
+.help-q:hover { background: var(--on-surface); }
 #pm-err-price { display: none; }
 
 /* Section prix (Figma One-Click 8494:21374) : bloc Neutral Container, label + montant centré « • Modifier » */
@@ -1698,7 +1700,8 @@ body { display: flex; justify-content: center; align-items: stretch; padding: 0;
           ${has ? `<span class="g-handle" data-zone="${z}" style="--i:${idx};--t:${gaugeT(a.price, z, G).toFixed(3)}"></span>` : ''}</div>
         <div class="g-range"><span>${G.p1} €</span><span>${G.p99} €</span></div></div>
       ${z === 'high' ? `<div class="g-awareness" role="status"><img src="${ASSET(`assets/icons/warning.svg`)}" alt="" width="24" height="24"><p>${pctBelow(a.price, G)}% des annonces similaires sont moins chères que la vôtre</p></div>` : ''}
-      <p class="reco-line t-body1">Prix recommandé entre <b>${G.p10} €</b> et <b>${G.p90} €</b></p></div>`;
+      <p class="reco-line t-body1">Prix recommandé entre <b>${G.p10} €</b> et <b>${G.p90} €</b><button class="help-q" data-a="recoMore" aria-expanded="${!!(S.pd && S.pd.more)}" aria-controls="reco-more" aria-label="Comment est calculé ce prix ?">?</button></p>
+      ${S.pd && S.pd.more ? '<p class="t-body2 dim" id="reco-more" style="margin-top:8px">Ces prix se basent sur les annonces similaires vendues récemment et sur les critères renseignés sur votre annonce.</p>' : ''}</div>`;
   }
   const SOLD_STATES = ['Très bon état', 'Bon état', 'Très bon état', 'État correct'];
   const draftAd = () => ({ ...ad(), price: S.pd.price });
@@ -1715,9 +1718,7 @@ body { display: flex; justify-content: center; align-items: stretch; padding: 0;
       <div class="field tight">
         <div class="input price-input"><input id="pm-price" aria-label="Prix de vente souhaité (obligatoire)" data-in="pmPrice" inputmode="numeric" maxlength="5" autocomplete="off" placeholder="0" value="${S.pd.price ?? ''}"><span class="addon">€</span></div>
         <span class="err" id="pm-err-price">Indiquez un prix</span></div>
-      ${a.analysed ? `<div class="reco-head"><h3 class="t-body1h">Recommandation de prix</h3><button class="textlink t-body2" data-a="recoMore" aria-expanded="${!!S.pd.more}" aria-controls="reco-more">En savoir plus</button></div>
-        ${S.pd.more ? '<p class="t-body2 dim" id="reco-more" style="margin-top:8px">Ces prix se basent sur les annonces similaires vendues récemment et sur les critères renseignés sur votre annonce.</p>' : ''}
-        <div class="recos" style="margin-top:16px">${recos.map(([v, l]) => `<button class="reco" data-a="pickPrice" data-v="${v}" aria-pressed="${S.pd.price === v}"><b class="t-body1h">${eur(v)}</b><span class="t-body2 dim">${l}</span></button>`).join('')}</div>`
+      ${a.analysed ? `<div id="pm-gauge" style="margin-top:24px">${priceGauge(d)}</div>`
         : '<p class="helper">Décrivez votre objet pour obtenir un prix recommandé.</p>'}
       <div class="field" style="margin-top:24px"><label for="pm-min">Prix minimum accepté</label>
         <div class="input-wrap"><input class="input" id="pm-min" data-in="pmMin" inputmode="numeric" maxlength="5" value="${S.pd.min ?? ''}" placeholder="0" aria-describedby="pm-min-h"><span class="suffix">€</span></div>
@@ -1732,7 +1733,7 @@ body { display: flex; justify-content: center; align-items: stretch; padding: 0;
   }
   function refreshPriceSheet(full) {
     if (full) { const b = $('#pm-body', layer); if (b) b.innerHTML = priceSheetBody(); return; }
-    $$('.reco', layer).forEach((r) => r.setAttribute('aria-pressed', +r.dataset.v === S.pd.price));
+    const g = $('#pm-gauge', layer); if (g) g.innerHTML = priceGauge(draftAd());
   }
 
   /* ---------- Bottom sheets superposées à la modale Livraison ---------- */
@@ -2025,7 +2026,7 @@ body { display: flex; justify-content: center; align-items: stretch; padding: 0;
     },
     give(t) { const a = ad(); a.give = t.dataset.v === '1'; $('#price')?.closest('.field')?.classList.remove('invalid'); render(); },
     pmGive(t) { S.pd.give = t.dataset.v === '1'; refreshPriceSheet(true); },
-    recoMore() { S.pd.more = !S.pd.more; refreshPriceSheet(true); },
+    recoMore() { S.pd.more = !S.pd.more; refreshPriceSheet(); },
     savePrice() {
       const d = S.pd, a = ad(); let bad = false;
       if (d.give) { a.give = true; closeSheet(true); render(); return; }
