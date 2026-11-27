@@ -1692,16 +1692,15 @@ body { display: flex; justify-content: center; align-items: stretch; padding: 0;
   function priceGauge(a) {
     const G = pctOf(recoOf(a)), has = !!a.price, z = has ? gZone(a.price, G) : null, idx = { low: 0, opt: 1, high: 2 }[z];
     const slot = (k, cls) => `<span class="g-slot ${cls}${z === k ? ' on' : ''}"><span class="g-text">${ZONE_FULL[k]}</span><span class="tag tag-g-${k}">${ZONE_FULL[k]}</span></span>`;
-    const aria = has ? `Votre prix : ${a.price} €, ${ZONE_FULL[z]} (environ ${pctBelow(a.price, G)} % des annonces similaires sont moins chères). Prix minimum ${G.p1} €, prix maximum ${G.p99} €.` : 'Jauge de prix';
+    const aria = has ? `Votre prix : ${a.price} €, ${ZONE_FULL[z]} (environ ${pctBelow(a.price, G)} % des annonces similaires sont moins chères). Prix recommandé entre ${G.p10} € et ${G.p90} €.` : 'Jauge de prix';
     return `<div class="gauge" data-zone="${z || ''}"><div class="g-content">
         <div class="g-head">${slot('low', 'g-left')}${slot('opt', 'g-center')}${slot('high', 'g-right')}</div>
         <div class="g-track" role="img" aria-label="${aria}">
           ${['low', 'opt', 'high'].map((k) => `<span class="g-seg${z === k ? ' on' : ''}" data-zone="${k}"></span>`).join('')}
           ${has ? `<span class="g-handle" data-zone="${z}" style="--i:${idx};--t:${gaugeT(a.price, z, G).toFixed(3)}"></span>` : ''}</div>
-        <div class="g-range"><span>${G.p1} €</span><span>${G.p99} €</span></div></div>
+        <div class="g-range"><span>${G.p10} €</span><span>${G.p90} €</span></div></div>
       ${z === 'high' ? `<div class="g-awareness" role="status"><img src="${ASSET(`assets/icons/warning.svg`)}" alt="" width="24" height="24"><p>${pctBelow(a.price, G)}% des annonces similaires sont moins chères que la vôtre</p></div>` : ''}
-      <p class="reco-line t-body1">Prix recommandé entre <b>${G.p10} €</b> et <b>${G.p90} €</b><button class="help-q" data-a="recoMore" aria-expanded="${!!(S.pd && S.pd.more)}" aria-controls="reco-more" aria-label="Comment est calculé ce prix ?">?</button></p>
-      ${S.pd && S.pd.more ? '<p class="t-body2 dim" id="reco-more" style="margin-top:8px">Ces prix se basent sur les annonces similaires vendues récemment et sur les critères renseignés sur votre annonce.</p>' : ''}</div>`;
+    </div>`;
   }
   const SOLD_STATES = ['Très bon état', 'Bon état', 'Très bon état', 'État correct'];
   const draftAd = () => ({ ...ad(), price: S.pd.price });
