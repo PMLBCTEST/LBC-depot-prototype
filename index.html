@@ -1709,7 +1709,8 @@ body { display: flex; justify-content: center; align-items: stretch; padding: 0;
     const a = ad(), d = draftAd(), R = recoOf(a), K = KINDS[a.kind], G = pctOf(R);
     const mine = new Set(S.ads.flatMap((x) => x.photos));
     let pool = GALLERY.filter((p) => kindOf(p) === a.kind && !mine.has(p)); if (pool.length < 6) pool = pool.concat(a.photos, a.photos);
-    const sold = pool.slice(0, 6).map((p, i) => [p, 0, ['3 jours', '5 jours', '2 jours', '6 jours', '4 jours', '8 jours'][i], [...SOLD_STATES, 'Bon état', 'Très bon état'][i]]);
+    const SOLD_F = [1.1, 0.95, 1.2, 0.85, 0.9, 1.0], soldPrice = (f) => (R >= 50 ? Math.round((R * f) / 5) * 5 : Math.round(R * f));
+    const sold = pool.slice(0, 6).map((p, i) => [p, soldPrice(SOLD_F[i]), ['3 jours', '5 jours', '2 jours', '6 jours', '4 jours', '8 jours'][i], [...SOLD_STATES, 'Bon état', 'Très bon état'][i]]);
     const recos = [[G.p10, 'Prix attractif'], [G.p50, 'Prix optimal'], [G.p90, 'Prix élevé']];
     const seg = `<div class="seg" role="radiogroup" aria-label="Type d'annonce" style="margin-bottom:24px"><button role="radio" aria-checked="${!S.pd.give}" data-a="pmGive" data-v="0">Je vends</button><button role="radio" aria-checked="${!!S.pd.give}" data-a="pmGive" data-v="1">Je donne</button></div>`;
     if (S.pd.give) return seg + giveBlock();
@@ -1724,7 +1725,7 @@ body { display: flex; justify-content: center; align-items: stretch; padding: 0;
         <p class="helper" id="pm-min-h">Le prix le plus bas que vous accepteriez en négociation. Il reste privé.</p>
         <span class="err" id="pm-err-min">Le prix minimum doit être inférieur ou égal au prix</span></div>
       ${a.analysed ? `<h3 class="t-subhead" style="margin:24px 0 16px">Articles similaires vendus</h3>
-      <div class="soldscroll" role="list">${sold.map(([p, pr, dd, st]) => `<article role="listitem"><div class="ph">${img(p)}</div><p class="t-caption dim" style="margin-top:8px">${st}</p><p class="t-captionh dim">Vendu en ${dd}</p></article>`).join('')}</div>` : ''}`;
+      <div class="soldscroll" role="list">${sold.map(([p, pr, dd, st]) => `<article role="listitem"><div class="ph">${img(p)}</div><p class="t-body1h" style="margin-top:8px">${eur(pr)}</p><p class="t-caption dim">${st}</p><p class="t-captionh dim">Vendu en ${dd}</p></article>`).join('')}</div>` : ''}`;
   }
   function openReco() {
     const a = ad(); S.pd = { price: a.price, min: a.min, give: !!a.give };
